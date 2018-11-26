@@ -1,15 +1,19 @@
 #!/usr/bin/python3
 
-from modules.utils import *
+import numpy as np
 from scipy.io import wavfile
+from modules.ejercicio1 import ejercicio1
+from modules.ejercicio2 import ejercicio2
 
-def main():
+def read_wavfile():
     filepath = 'modemDialing.wav'
     fs, data = wavfile.read(filepath)
     data = np.trim_zeros(data)
 
-    show_signal(data, fs)
-    show_spectogram(data, fs)
+    return fs, data
+
+def main():
+    ejercicio2(8000)
     
 if __name__ == "__main__":
     main()

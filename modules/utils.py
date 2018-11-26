@@ -15,6 +15,11 @@ def lcm(a,b):
 
     return a_lcm
 
+def sin(f,fs,duration):
+    samples = np.linspace(0, duration, int(fs*duration), endpoint=False)
+    sine_samples = 32767 * np.sin(2*np.pi*f*samples)
+    return np.int16(sine_samples)
+
 def t_axis(fs, len_data):
     return np.linspace(0, len_data/fs, num=len_data)
 

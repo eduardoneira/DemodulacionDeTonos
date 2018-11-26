@@ -1,8 +1,8 @@
 #!/bin/python3
 
 from fractions import Fraction
+from modules.utils import lcm
 from modules.dfmt_signals import *
-from modules.utils import *
 
 def ejercicio1():
     print('Fundamental frequency for each digit')
