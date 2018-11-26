@@ -15,15 +15,23 @@ def lcm(a,b):
 
     return a_lcm
 
-def sin(f,fs,duration):
+def sin(f,fs,duration,use_window=False):
     samples = np.linspace(0, duration, int(fs*duration), endpoint=False)
-    sine_samples = 32767 * np.sin(2*np.pi*f*samples)
-    return np.int16(sine_samples)
+    signal = np.sin(2*np.pi*f*samples)
+    
+    if use_window:
+        signal *= np.hanning(len(signal))
+
+    return signal
+
+def digital_sin(f,fs,duration,use_window=False):
+    signal = 32767 * sin(f,fs,duration,use_window=use_window)
+    return np.int16(signal)
 
 def t_axis(fs, len_data):
     return np.linspace(0, len_data/fs, num=len_data)
 
-def show_signal(data, fs):
+def show_signal(fs, data):
     max_value = float(np.max(np.abs(data)))
     normalized_data = data / max_value
 
@@ -33,6 +41,14 @@ def show_signal(data, fs):
     plt.xlabel('Tiempo (s)')
     plt.show()
     return None
+
+def fft(fs,signal):
+    N = int(np.exp2(np.ceil(np.log2(len(signal)))))
+    padded_signal = np.pad(signal,(0,N-len(signal)),'constant')
+    Y = np.fft.fft(padded_signal)
+    freq = np.fft.fftfreq(len(padded_signal), 1/fs)
+    
+    return np.abs(Y), np.angle(Y), freq
 
 def show_spectogram(data, fs):
     NFFT = 512 
