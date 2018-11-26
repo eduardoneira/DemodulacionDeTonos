@@ -3,6 +3,7 @@
 from modules.dfmt_signals import *
 from modules.utils import show_signal,fft
 from matplotlib import pyplot as plt
+import numpy as np
 
 def show_fft_digit_signal(freq, magnitude, title):
     plt.plot(freq, magnitude)
@@ -11,6 +12,33 @@ def show_fft_digit_signal(freq, magnitude, title):
     plt.ylabel('Magnitude')
     plt.savefig('img/FFT_{}.png'.format(title.lower().replace(' ','_')),bbox_inches='tight')
     plt.close()
+
+def subplot_spectogram(nrows, ncols, idx, fs, data, nfft, window, window_name):
+    plt.subplot(nrows, ncols, idx)
+    plt.specgram(data, NFFT=nfft, window=window(nfft), Fs=fs, noverlap=nfft // 2)
+    plt.title("{} puntos".format(nfft))
+    plt.xlabel("Tiempo (s)")
+    plt.ylabel("Frecencia (Hz)")
+
+
+def plot_spectogram(fs, data, window, window_name):
+    nfft1 = 128
+    nfft2 = 512
+    nfft3 = 1024
+    nfft4 = 4096
+
+    plt.figure()
+    plt.suptitle('Espectrograma con ventana {}'.format(window_name))
+
+    subplot_spectogram(2,2,1,fs,data,nfft1,window,window_name)
+    subplot_spectogram(2,2,2,fs,data,nfft2,window,window_name)
+    subplot_spectogram(2,2,3,fs,data,nfft3,window,window_name)
+    subplot_spectogram(2,2,4,fs,data,nfft4,window,window_name)
+
+    plt.subplots_adjust(hspace=0.5,wspace=0.5)
+    plt.savefig('img/ej3_spectrogam_{}.png'.format(window_name),bbox_inches='tight')
+    plt.close()
+
 
 def ejercicio3(fs, data):
     first_digit = data[int(3.36*fs):int(3.45*fs)]
@@ -35,6 +63,10 @@ def ejercicio3(fs, data):
 
     magnitude, phase, freq = fft(fs, data)
     show_fft_digit_signal(freq, magnitude, 'Modem Dialing')
+
+    plot_spectogram(fs,data,np.ones,'rectangular')
+    plot_spectogram(fs,data,np.hanning,'de hanning')
+    plot_spectogram(fs,data,np.hamming,'de  hamming')
 
     # fig, ax = plt.subplots(nrows=4, ncols=4)
     # fig.subplots_adjust(hspace=0.5, wspace=0.5)

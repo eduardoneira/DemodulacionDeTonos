@@ -5,6 +5,9 @@ from scipy.io import wavfile
 from modules.ejercicio1 import ejercicio1
 from modules.ejercicio2 import ejercicio2
 from modules.ejercicio3 import ejercicio3
+from modules.ejercicio5 import ejercicio5
+from modules.ejercicio6 import ejercicio6
+from modules.ejercicio7 import ejercicio7
 
 def read_wavfile():
     filepath = 'modemDialing.wav'
@@ -13,7 +16,7 @@ def read_wavfile():
 
 def main():
     fs, data = read_wavfile()
-    ejercicio3(fs, data)
+    ejercicio7()
     
 if __name__ == "__main__":
     main()
