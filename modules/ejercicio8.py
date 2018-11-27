@@ -24,7 +24,13 @@ def decode_signal(signal):
     squared_signal = signal ** 2
     length_filter = 64
     moving_average_filter = np.ones(length_filter) / length_filter
+    show_signal(1, np.pad(moving_average_filter,(10,10),mode='constant'), 'Filtro Moving Average', normalized=False)
+    plt.savefig('img/ej8_moving_average_filter.png',bbox_inches='tight')
+    plt.close()
     energy = np.convolve(squared_signal, moving_average_filter)
+    show_signal(DEFAULT_FS, energy, 'Energia de la señal con delay')
+    plt.savefig('img/ej8_estimated_energy_delay.png',bbox_inches='tight')
+    plt.close()
     energy = energy[1+length_filter//2:]
 
     show_signal(DEFAULT_FS, energy, 'Energia de la Señal')

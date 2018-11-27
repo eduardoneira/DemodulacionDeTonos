@@ -31,9 +31,12 @@ def digital_sin(f,fs,duration,use_window=False):
 def t_axis(fs, len_data):
     return np.linspace(0, len_data/fs, num=len_data)
 
-def show_signal(fs, data, title):
+def show_signal(fs, data, title, normalized=True):
     max_value = float(np.max(np.abs(data)))
-    normalized_data = data / max_value
+    normalized_data = data
+    
+    if normalized:
+        normalized_data = normalized_data / max_value
 
     plt.plot(t_axis(fs, len(normalized_data)),normalized_data)
     plt.title(title)
