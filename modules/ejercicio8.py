@@ -39,7 +39,7 @@ def decode_signal(signal):
 
     max_energy = np.max(energy)
     normalized_energy = energy / max_energy
-    threshold = 0.8
+    threshold = 0.7
 
     real_signal_index = np.where(normalized_energy > threshold)[0]
 
