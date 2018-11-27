@@ -20,7 +20,6 @@ def subplot_spectogram(nrows, ncols, idx, fs, data, nfft, window, window_name):
     plt.xlabel("Tiempo (s)")
     plt.ylabel("Frecencia (Hz)")
 
-
 def plot_spectogram(fs, data, window, window_name):
     nfft1 = 128
     nfft2 = 512

@@ -8,6 +8,7 @@ from modules.ejercicio3 import ejercicio3
 from modules.ejercicio5 import ejercicio5
 from modules.ejercicio6 import ejercicio6
 from modules.ejercicio7 import ejercicio7
+from modules.ejercicio8 import ejercicio8
 
 def read_wavfile():
     filepath = 'modemDialing.wav'
@@ -16,7 +17,7 @@ def read_wavfile():
 
 def main():
     fs, data = read_wavfile()
-    ejercicio7()
+    ejercicio8()
     
 if __name__ == "__main__":
     main()

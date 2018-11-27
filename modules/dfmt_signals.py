@@ -6,6 +6,8 @@ import numpy as np
 DEFAULT_FS = 8000
 TIME_DIGIT = 0.07
 
+POSSIBLE_FREQUENCIES = [697, 770, 852, 941, 1209, 1336, 1477, 1633]
+
 DFMT_DIGITS =['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D']
 
 DFMT_SIGNALS = {
@@ -26,6 +28,22 @@ DFMT_SIGNALS = {
     '#': (941,1477),
     'D': (941,1633)
 }
+
+def nearest_possible_frequency(frequency):
+    delta = 30
+
+    for possible_frequency in POSSIBLE_FREQUENCIES:
+        if frequency > possible_frequency - delta and frequency < possible_frequency + delta:
+            return possible_frequency
+
+    return None
+
+def frequencies_to_digit(frequencies):
+    for digit, digit_frequencies in DFMT_SIGNALS.items():
+        if frequencies[0] == digit_frequencies[0] and frequencies[1] == digit_frequencies[1]:
+            return digit
+
+    return None
 
 def dfmt_signal_for(digit, fs=DEFAULT_FS, duration=TIME_DIGIT, use_window=False):
     return sin(DFMT_SIGNALS[digit][0], fs, duration,use_window=use_window) + sin(DFMT_SIGNALS[digit][1], fs, duration,use_window=use_window)
