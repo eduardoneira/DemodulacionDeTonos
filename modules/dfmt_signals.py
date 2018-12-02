@@ -49,7 +49,7 @@ def frequencies_to_digit(frequencies):
 
 def dfmt_signal_for(digit, fs=DEFAULT_FS, duration=TIME_DIGIT, use_window=False):
     return sin(DFMT_SIGNALS[digit][0], fs, duration,use_window=use_window) + sin(DFMT_SIGNALS[digit][1], fs, duration,use_window=use_window)
-
+    
 def dfmt_generator_with(sequence, duration_digit=TIME_DIGIT):
     signal = np.array([])
 

@@ -13,6 +13,7 @@ from modules.ejercicio9 import ejercicio9
 
 def read_wavfile():
     filepath = 'modemDialing.wav'
+    filepath = 'output/DFMT_32327.wav'
     fs, data = wavfile.read(filepath)
     return fs, np.trim_zeros(data)
 

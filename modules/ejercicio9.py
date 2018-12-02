@@ -24,25 +24,29 @@ def plot_pass_band_filters():
     plt.show()
 
 
-def pass_band_filter(duration, fs, fc):
-    width_pulse = 60
-    samples = np.linspace(-duration//2, duration//2, int(fs*duration), endpoint=False)
-    sinc = np.sinc(width_pulse*samples)
-    sinc *= np.cos(2*np.pi*fc*samples)
+def pass_band_filter(fc):
+    duration = 15
+    fs = DEFAULT_FS
+    samples = np.linspace(-duration//2, duration//2, int(4*fs*0.07), endpoint=False)
+    sinc = np.sinc(samples)
+    show_signal(fs, sinc, 'Sinc')
+    plt.show()
+    sinc *= np.cos(2*np.pi*(fc/53)*samples)
     sinc *= np.hamming(len(sinc))
-    return sinc
+    # return sinc
     # show_signal(fs, sinc, 'Sinc')
     # plt.savefig('img/ej9_sinc_time.png', bbox_inches='tight')
     # plt.close()
 
-    # magnitude, angle, freq = fft(fs, sinc)
-    # plt.plot(freq, magnitude)
-    # plt.title('DFT Sinc Sin Ventaneo')
-    # plt.xlabel('Frequencia (Hz)')
-    # plt.ylabel('Modulo')
+    magnitude, angle, freq = fft(fs, sinc)
+    plt.plot(freq, magnitude)
+    plt.title('DFT Sinc Sin Ventaneo')
+    plt.xlabel('Frequencia (Hz)')
+    plt.ylabel('Modulo')
+    plt.show()
     # plt.xlim(-50,50)
     # plt.savefig('img/ej9_sinc_dft_no_window.png', bbox_inches='tight')
-    # plt.close()
+    plt.close()
 
 def energy_estimator(fs, signal):
     squared_signal = signal ** 2
@@ -122,10 +126,12 @@ def filter_bank(fs, data):
     return sequence
 
 def ejercicio9():
-    sequence_digits = ['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D']
-    signal = dfmt_generator_with(sequence_digits)
+    # sequence_digits = ['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D']
+    # signal = dfmt_generator_with(sequence_digits)
 
-    estimated_sequence = filter_bank(DEFAULT_FS, signal)
+    # estimated_sequence = filter_bank(DEFAULT_FS, signal)
 
-    print('Real sequence: {}'.format(sequence_digits))
-    print('Estimated sequence: {}'.format(estimated_sequence))
+    # print('Real sequence: {}'.format(sequence_digits))
+    # print('Estimated sequence: {}'.format(estimated_sequence))
+
+    pass_band_filter(697)
