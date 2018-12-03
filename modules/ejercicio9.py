@@ -69,6 +69,7 @@ def plot_filter_bank(fs, data):
         y[frequency] = np.convolve(data, pb_filter)
 
         estimated_energy = energy_estimator(y[frequency])
+        # estimated_energy = y[frequency]
 
         plt.subplot(4, 2, idx+1)
         plt.plot(t_axis(fs, len(estimated_energy)), estimated_energy)
@@ -91,7 +92,7 @@ def filter_bank(fs, data):
 
         max_energy = np.max(estimated_energy)
         normalized_energy = estimated_energy / max_energy
-        threshold = 0.6
+        threshold = 0.5
 
         energy_idxs = np.where(normalized_energy > threshold)[0]
 
@@ -114,25 +115,37 @@ def filter_bank(fs, data):
             for low_intervals_idxs in energy_idxs_by_frequency[low_freq]:
                 for high_intervals_idxs in energy_idxs_by_frequency[high_freq]:
                     if np.intersect1d(low_intervals_idxs, high_intervals_idxs).size > 20:
-                        sequence.append((low_intervals_idxs[0],frequencies_to_digit((low_freq,high_freq))))
+                        sequence.append((low_intervals_idxs[0],frequencies_to_digit((low_freq,high_freq))[0]))
 
     dtype = [('idx',int),('digit','S1')]
     sequence = np.array(sequence, dtype=dtype)
-    sequence = np.unique(sequence)
+
     ordered_sequence = np.sort(sequence, order='idx')
 
     sequence = []
-    for idx, digit in ordered_sequence:
-        sequence.append(digit.decode('UTF-8'))
+    previous = (None, None)
+
+    for i, idx_and_digit in enumerate(ordered_sequence):
+        idx = idx_and_digit[0]
+        digit = idx_and_digit[1]
+
+        if previous[1] == digit:
+            if (idx - previous[0]) > SILENCE_TIME:
+                sequence.append(digit.decode('UTF-8'))
+        else:
+            sequence.append(digit.decode('UTF-8'))
+
+        previous = (idx, digit)
 
     return sequence
 
-def ejercicio9():
+def ejercicio9(fs, data):
     sequence_digits = ['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D']
     signal = dfmt_generator_with(sequence_digits)
-    #signal += np.random.normal(0,1,len(signal))
+    signal += np.random.normal(0,1,len(signal))
     #show_signal(DEFAULT_FS, signal, 'Señal con ruido')
     #plt.show()
+    # plot_filter_bank(DEFAULT_FS, signal)
     estimated_sequence = filter_bank(DEFAULT_FS, signal)
 
     print('Real sequence: {}'.format(sequence_digits))
