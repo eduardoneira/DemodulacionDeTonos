@@ -41,11 +41,13 @@ def nearest_possible_frequency(frequency):
     return None
 
 def frequencies_to_digit(frequencies):
-    for digit, digit_frequencies in DFMT_SIGNALS.items():
-        if frequencies[0] == digit_frequencies[0] and frequencies[1] == digit_frequencies[1]:
-            return digit
+    result = []
 
-    return None
+    for digit, digit_frequencies in DFMT_SIGNALS.items():
+        if digit_frequencies[0] in frequencies and digit_frequencies[1] in frequencies:
+            result.append(digit)
+
+    return result
 
 def dfmt_signal_for(digit, fs=DEFAULT_FS, duration=TIME_DIGIT, use_window=False):
     return sin(DFMT_SIGNALS[digit][0], fs, duration,use_window=use_window) + sin(DFMT_SIGNALS[digit][1], fs, duration,use_window=use_window)

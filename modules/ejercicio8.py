@@ -24,18 +24,18 @@ def decode_signal(signal):
     squared_signal = signal ** 2
     length_filter = 64
     moving_average_filter = np.ones(length_filter) / length_filter
-    show_signal(1, np.pad(moving_average_filter,(10,10),mode='constant'), 'Filtro Moving Average', normalized=False)
-    plt.savefig('img/ej8_moving_average_filter.png',bbox_inches='tight')
-    plt.close()
+    # show_signal(1, np.pad(moving_average_filter,(10,10),mode='constant'), 'Filtro Moving Average', normalized=False)
+    # plt.savefig('img/ej8_moving_average_filter.png',bbox_inches='tight')
+    # plt.close()
     energy = np.convolve(squared_signal, moving_average_filter)
-    show_signal(DEFAULT_FS, energy, 'Energia de la señal con delay')
-    plt.savefig('img/ej8_estimated_energy_delay.png',bbox_inches='tight')
-    plt.close()
+    # show_signal(DEFAULT_FS, energy, 'Energia de la señal con delay')
+    # plt.savefig('img/ej8_estimated_energy_delay.png',bbox_inches='tight')
+    # plt.close()
     energy = energy[1+length_filter//2:]
 
-    show_signal(DEFAULT_FS, energy, 'Energia de la Señal')
-    plt.savefig('img/ej8_estimated_energy.png', bbox_inches='tight')
-    plt.close()
+    # show_signal(DEFAULT_FS, energy, 'Energia de la Señal')
+    # plt.savefig('img/ej8_estimated_energy.png', bbox_inches='tight')
+    # plt.close()
 
     max_energy = np.max(energy)
     normalized_energy = energy / max_energy
@@ -69,13 +69,14 @@ def decode_signal(signal):
             frequency = lobe * 4000 /magnitude.size
             lobes.append(nearest_possible_frequency(frequency))  
 
+        lobes = lobes[lobes != np.array(None)]
         lobe_frequencies = np.unique(lobes)
 
         sequence.append(frequencies_to_digit(lobe_frequencies))
 
     return sequence
 
-def ejercicio8():
+def ejercicio8(fs, data):
     sequence_digits = ['3','2','3','2','7']
     signal = dfmt_generator_with(sequence_digits)
 

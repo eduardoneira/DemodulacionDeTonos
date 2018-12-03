@@ -47,9 +47,16 @@ def fft(fs,signal):
     N = int(np.exp2(np.ceil(np.log2(len(signal)))))
     padded_signal = np.pad(signal,(0,N-len(signal)),'constant')
     Y = np.fft.fft(padded_signal)
+
+    magnitude = np.abs(Y)
+    angle = np.angle(Y)
     freq = np.fft.fftfreq(len(padded_signal), 1/fs)
-    
-    return np.abs(Y), np.angle(Y), freq
+
+    magnitude = np.append(magnitude[len(magnitude)//2:], magnitude[:len(magnitude)//2])
+    angle = np.append(angle[len(angle)//2:], angle[:len(angle)//2])
+    freq = np.append(freq[len(freq)//2:], freq[:len(freq)//2])
+        
+    return magnitude, angle, freq
 
 def show_spectogram(fs, data, nfft, window,title):
     plt.specgram(data, Fs=fs, window=window, NFFT=nfft, noverlap=nfft/2)
