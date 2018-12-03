@@ -1,5 +1,6 @@
 #!/bin/python3
 
+import pdb
 import numpy as np
 from matplotlib import pyplot as plt
 from modules.dfmt_signals import *
@@ -17,8 +18,9 @@ def plot_digit_signal(idx, signal, magnitude, freq):
     plt.title('FFT de dígito N°{}'.format(idx))
     plt.xlabel('Frequencia (Hz)')
     plt.ylabel('Módulo')
-    plt.savefig('img/ej8_FFT_{}.png'.format(idx),bbox_inches='tight')
-    plt.close()
+    # plt.savefig('img/ej8_FFT_{}.png'.format(idx),bbox_inches='tight')
+    # plt.close()
+    plt.show()
 
 def decode_signal(signal):
     squared_signal = signal ** 2
@@ -55,21 +57,20 @@ def decode_signal(signal):
         current_signal = signal[digit_interval]
         magnitude, phase, freq = fft(DEFAULT_FS,current_signal)
 
-        plot_digit_signal(idx+1, current_signal, magnitude, freq)
-        
-        magnitude = magnitude[:magnitude.size//2]
+        #plot_digit_signal(idx+1, current_signal, magnitude, freq)
+        magnitude = magnitude[magnitude.size//2:]
         max_magnitude = np.max(magnitude)
         normalized_magnitude = magnitude / max_magnitude
 
-        lobes_index = np.where(normalized_magnitude > 0.60)[0]
+        lobes_index = np.where(normalized_magnitude > 0.6)[0]
         
         lobes = []
         
         for lobe in lobes_index:
-            frequency = lobe * 4000 /magnitude.size
+            frequency = lobe * 4000 / normalized_magnitude.size
             lobes.append(nearest_possible_frequency(frequency))  
 
-        lobes = lobes[lobes != np.array(None)]
+        lobes = np.array(lobes)[lobes != np.array(None)]
         lobe_frequencies = np.unique(lobes)
 
         sequence.append(frequencies_to_digit(lobe_frequencies))
