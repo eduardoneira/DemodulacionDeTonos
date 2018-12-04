@@ -23,25 +23,25 @@ def plot_digit_signal(idx, signal, magnitude, freq):
     plt.show()
 
 def decode_signal(signal):
-    squared_signal = signal ** 2
+    squared_signal = np.array(signal, dtype=np.float64) ** 2
     length_filter = 64
     moving_average_filter = np.ones(length_filter) / length_filter
     # show_signal(DEFAULT_FS, np.pad(moving_average_filter,(10,10),mode='constant'), 'Filtro Moving Average', normalized=False)
     # plt.savefig('img/ej8_moving_average_filter.png',bbox_inches='tight')
     # plt.close()
     energy = np.convolve(squared_signal, moving_average_filter)
-    #show_signal(DEFAULT_FS, energy, 'Energia de la señal con delay')
-    #plt.show()
     # plt.savefig('img/ej8_estimated_energy_delay.png',bbox_inches='tight')
     # plt.close()
-    energy = energy[1+length_filter//2:]
+    energy = energy[length_filter-1:]
+    # show_signal(DEFAULT_FS, energy, 'Energia de la señal')
+    # plt.show()
 
     # plt.savefig('img/ej8_estimated_energy.png', bbox_inches='tight')
     # plt.close()
 
     max_energy = np.max(energy)
     normalized_energy = energy / max_energy
-    threshold = 0.5
+    threshold = 0.1
     #show_signal(DEFAULT_FS, energy, 'Energia de la Señal')
     #show_signal(DEFAULT_FS, threshold*np.ones(len(energy)), 'Energia de la Señal', normalized=False)
     #plt.show()
@@ -60,12 +60,12 @@ def decode_signal(signal):
         current_signal = signal[digit_interval]
         magnitude, phase, freq = fft(DEFAULT_FS,current_signal)
 
-        #plot_digit_signal(idx+1, current_signal, magnitude, freq)
+        # plot_digit_signal(idx+1, current_signal, magnitude, freq)
         magnitude = magnitude[magnitude.size//2:]
-        # max_magnitude = np.max(magnitude)
-        # normalized_magnitude = magnitude / max_magnitude
+        max_magnitude = np.max(magnitude)
+        normalized_magnitude = magnitude / max_magnitude
 
-        lobes_index = np.where(magnitude > 60)[0]
+        lobes_index = np.where(normalized_magnitude > 0.5)[0]
         
         lobes = []
         
@@ -85,7 +85,7 @@ def ejercicio8(fs, data):
     sequence_digits = ['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D']
     
     signal = dfmt_generator_with(sequence_digits)
-    #signal += np.random.normal(0,1,len(signal))
+    # signal += np.random.normal(0,1,len(signal))
     #show_signal(DEFAULT_FS, signal, 'Señal con Ruido Blanco Gaussiano')
     #plt.show()
     estimated_sequence = decode_signal(signal)

@@ -14,13 +14,12 @@ from modules.ejercicio10 import ejercicio10
 
 def read_wavfile():
     filepath = 'modemDialing.wav'
-    filepath = 'output/DFMT_32327.wav'
     fs, data = wavfile.read(filepath)
     return fs, np.trim_zeros(data)
 
 def main():
     fs, data = read_wavfile()
-    ejercicio8(fs, data)
+    ejercicio9(fs, data)
     
 if __name__ == "__main__":
     main()

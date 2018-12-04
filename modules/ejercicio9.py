@@ -49,8 +49,7 @@ def pass_band_filter(fs, fc):
     # plt.savefig('img/ej9_sinc_dft_hamming_window.png', bbox_inches='tight')
 
 def energy_estimator(signal):
-    squared_signal = signal ** 2
-    
+    squared_signal = np.array(signal, dtype=np.float64) ** 2
     length_filter = 64
     moving_average_filter = np.ones(length_filter) / length_filter
 
@@ -92,7 +91,7 @@ def filter_bank(fs, data):
 
         max_energy = np.max(estimated_energy)
         normalized_energy = estimated_energy / max_energy
-        threshold = 0.5
+        threshold = 0.2
 
         energy_idxs = np.where(normalized_energy > threshold)[0]
 
@@ -142,10 +141,10 @@ def filter_bank(fs, data):
 def ejercicio9(fs, data):
     sequence_digits = ['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D']
     signal = dfmt_generator_with(sequence_digits)
-    signal += np.random.normal(0,1,len(signal))
+    # signal += np.random.normal(0,1,len(signal))
     #show_signal(DEFAULT_FS, signal, 'Señal con ruido')
     #plt.show()
-    # plot_filter_bank(DEFAULT_FS, signal)
+    plot_filter_bank(DEFAULT_FS, signal)
     estimated_sequence = filter_bank(DEFAULT_FS, signal)
 
     print('Real sequence: {}'.format(sequence_digits))
